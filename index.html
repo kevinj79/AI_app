@@ -1,14 +1,36 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Study App</title>
-  </head>
-  <body>
-    <h1>Study App</h1>
-    <textarea id="prompt" rows="4" cols="50"></textarea><br />
-    <button id="send">Ask</button>
-    <pre id="output"></pre>
-    <script src="renderer.js"></script>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'" />
+  <title>Study App</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="start">
+    <header><h1>Study App</h1></header>
+
+    <main id="output-wrap"><div id="output"></div></main>
+
+    <section id="composer">
+      <div class="box">
+        <textarea id="prompt" rows="1" placeholder="Ask a question, or attach a PDF and tell me how to format it"></textarea>
+        <div class="row">
+          <button id="attach" type="button">Attach PDF</button>
+          <span id="chip" hidden>
+            <span id="chip-name"></span>
+            <button id="chip-remove" type="button" aria-label="Remove PDF">×</button>
+          </span>
+          <span class="spacer"></span>
+          <button id="send" type="button">Send</button>
+        </div>
+      </div>
+      <input type="file" id="pdf" accept="application/pdf" hidden />
+    </section>
+
+    <div id="start-status"></div>
+  </div>
+  <script src="renderer.js"></script>
+</body>
 </html>

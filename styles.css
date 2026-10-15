@@ -1,0 +1,164 @@
+:root {
+  --bg: #ffffff;
+  --text: #1f2328;
+  --muted: #6b7280;
+  --border: #d9dce1;
+  --surface: #f4f5f7;
+  --accent: #4f46e5;
+  --accent-text: #ffffff;
+  --error: #b42318;
+  --col: 960px; /* max content width, raise this if the margins still feel big */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181d;
+    --text: #e8eaed;
+    --muted: #9aa0a6;
+    --border: #343842;
+    --surface: #21242b;
+    --accent: #818cf8;
+    --accent-text: #12141a;
+    --error: #f97066;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; margin: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+#app { height: 100%; display: flex; flex-direction: column; }
+
+/* Title */
+header { width: 100%; text-align: center; }
+header h1 { margin: 0; font-weight: 650; letter-spacing: -0.02em; }
+
+/* Start screen: title and box centered in the window */
+#app.start { justify-content: center; }
+#app.start header h1 { font-size: clamp(1.8rem, 5vw, 2.8rem); margin-bottom: 1.5rem; }
+#app.start #output-wrap { display: none; }
+
+/* Chat screen: title on top, answer in the middle, box on the bottom */
+#app.chat header { padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+#app.chat header h1 { font-size: 1.15rem; }
+#app.chat #start-status { display: none; }
+
+#output-wrap { flex: 1; min-height: 0; overflow-y: auto; }
+#output {
+  width: min(100% - 2rem, var(--col));
+  margin: 0 auto;
+  padding: 1.25rem 0 1rem;
+  animation: fade 0.3s ease;
+}
+
+/* Input box */
+#composer { width: min(100% - 2rem, var(--col)); margin: 0 auto; }
+#app.chat #composer { padding: 0.75rem 0 1rem; }
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.box:focus-within { border-color: var(--accent); }
+
+textarea {
+  width: 100%;
+  min-height: 1.6em;
+  max-height: 200px;
+  field-sizing: content; /* grows as you type */
+  resize: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.spacer { flex: 1; }
+
+button {
+  font: inherit;
+  cursor: pointer;
+  padding: 0.35rem 0.8rem;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+button:hover:not(:disabled) { background: var(--border); }
+button:disabled { opacity: 0.5; cursor: default; }
+
+#send { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+#send:hover:not(:disabled) { background: var(--accent); filter: brightness(1.1); }
+
+#chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  max-width: 100%;
+  padding: 0.15rem 0.2rem 0.15rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+#chip-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 40vw; }
+#chip-remove { padding: 0 0.5rem; border: 0; border-radius: 999px; }
+
+/* Loading dots */
+#start-status { width: min(100% - 2rem, var(--col)); margin: 0 auto; min-height: 3.5rem; padding-top: 1rem; }
+.loading { display: flex; align-items: center; justify-content: center; gap: 0.5rem; color: var(--muted); }
+#output .loading { padding: 2rem 0; }
+.dots { display: inline-flex; align-items: center; gap: 4px; }
+.dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+.dots i:nth-child(2) { animation-delay: 0.15s; }
+.dots i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Rendered answer */
+#output h1, #output h2, #output h3, #output h4 { line-height: 1.25; margin: 1.4em 0 0.5em; }
+#output h1 { font-size: 1.6rem; }
+#output h2 { font-size: 1.35rem; }
+#output h3 { font-size: 1.15rem; }
+#output h4 { font-size: 1rem; }
+#output > :first-child { margin-top: 0; }
+#output p { margin: 0.6em 0; }
+#output ul, #output ol { margin: 0.4em 0; padding-left: 1.4em; }
+#output li { margin: 0.25em 0; }
+#output hr { border: 0; border-top: 1px solid var(--border); margin: 1.2em 0; }
+#output pre {
+  overflow-x: auto;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+#output code { font-family: ui-monospace, Menlo, monospace; font-size: 0.9em; }
+#output :not(pre) > code { padding: 0.1em 0.35em; background: var(--surface); border-radius: 5px; }
+.error { color: var(--error); }
